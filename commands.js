@@ -10,18 +10,15 @@ Cypress.Commands.add('mark', name => {
 function recordMeasure(name, measure) {
 	let specName = Cypress.mocha.getRunner().suite.title;
 	if (!Cypress.measures) {
-		Cypress.measures = {
-			[specName]: {
-				[name]: [measure.duration],
-			},
-		};
-	} else if (!Cypress.measures[specName] || !Cypress.measures[specName][name]) {
-		Cypress.measures[specName] = {
-			[name]: [measure.duration],
-		};
-	} else {
-		Cypress.measures[specName][name].push(measure.duration);
+		Cypress.measures = {};
 	}
+	if (!Cypress.measures[specName]) {
+		Cypress.measures[specName] = {};
+	}
+	if (!Cypress.measures[specName][name]) {
+		Cypress.measures[specName][name] = [];
+	}
+	Cypress.measures[specName][name].push(measure.duration);
 }
 
 Cypress.Commands.add('measure', (name, start, end) => {
